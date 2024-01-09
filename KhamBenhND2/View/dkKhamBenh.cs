@@ -54,6 +54,8 @@ namespace KhamBenhND2.View
             thoigiankham = "";
         }
 
+        // LICHSUKHAM CURRENT
+
         private List<LichSuKham> getListLSKToday()
         {
             foreach (LichSuKham lsk in lichSuKhamController.loadAll())
@@ -1143,6 +1145,20 @@ namespace KhamBenhND2.View
             checkedYearInput(tb_year);
         }
 
+        private void tb_year_Validated(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(tb_year.Text))
+            {
+                string year = tb_year.Text;
+                int tuoi = DateTime.Now.Year - Int32.Parse(year);
+                if (tuoi >= 17)
+                {
+                    MessageBox.Show("Bệnh nhân vượt quá tuổi quy định (0 - 16 tuổi)!");
+                    tb_year.Clear();
+                }
+            }
+        }
+
         private void tb_hanthe_year_TextChanged(object sender, EventArgs e)
         {
             checkedYearInput(tb_hanthe_year);
@@ -1745,5 +1761,6 @@ namespace KhamBenhND2.View
 
             e.Graphics.DrawString("Bệnh nhân vui lòng chờ gọi đến số thứ tự!", new Font("Arial", 15, FontStyle.Italic), Brushes.Black, new Point(100, 800));
         }
+
     }
 }

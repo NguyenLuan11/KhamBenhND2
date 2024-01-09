@@ -1312,6 +1312,7 @@
             tb_year.Size = new Size(55, 23);
             tb_year.TabIndex = 119;
             tb_year.TextChanged += tb_year_TextChanged;
+            tb_year.Validated += tb_year_Validated;
             // 
             // tb_month
             // 

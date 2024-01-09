@@ -126,6 +126,8 @@ namespace KhamBenhND2.View
                             dgv_dskhambenh.Rows.Add(row);
                         }
                     }
+
+                    load_TreeView(dgv_dskhambenh);
                 }
                 else
                 {
@@ -148,6 +150,114 @@ namespace KhamBenhND2.View
             printPreviewDialogDSkham.ShowDialog();
         }
 
+        // LOAD TREEVIEW
+
+        private void load_NodeCaKham(DataGridView dgv)
+        {
+            treeView_phanloaiBN.Nodes[1].Nodes.Clear();
+            foreach (CaKham caKham in caKhamController.loadAll())
+            {
+                int slCaKham = 0;
+                foreach (DataGridViewRow row in dgv.Rows)
+                {
+                    if (row.Cells["MaBN"].Value != null && row.Cells["PhongKham"].Value != null)
+                    {
+                        string maBN = row.Cells["MaBN"].Value.ToString();
+                        string phongkham = row.Cells["PhongKham"].Value.ToString();
+                        string maPK = phongKhamController.getPKByTenPK(phongkham).MaPK;
+                        foreach (LichSuKham lsk in lichSuKhamController.loadAll())
+                        {
+                            if (lsk.MaBN == maBN && lsk.MaPK == maPK)
+                            {
+                                if (caKham.MaCaKham == lsk.MaCaKham)
+                                {
+                                    slCaKham++;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                treeView_phanloaiBN.Nodes[1].Nodes.Add(caKham.TenCaKham + "(" + slCaKham.ToString() + ")");
+            }
+        }
+
+        private void load_NodeDoiTuong(DataGridView dgv)
+        {
+            treeView_phanloaiBN.Nodes[4].Nodes.Clear();
+            foreach (DoiTuong doiTuong in doiTuongController.loadAll())
+            {
+                int slDoiTuong = 0;
+                foreach (DataGridViewRow row in dgv.Rows)
+                {
+                    if (row.Cells["MaBN"].Value != null)
+                    {
+                        string maBN = row.Cells["MaBN"].Value.ToString();
+                        string phongkham = row.Cells["PhongKham"].Value.ToString();
+                        string maPK = phongKhamController.getPKByTenPK(phongkham).MaPK;
+                        foreach (LichSuKham lsk in lichSuKhamController.loadAll())
+                        {
+                            if (lsk.MaBN == maBN && lsk.MaPK == maPK)
+                            {
+                                if (lsk.MaDT == doiTuong.MaDT)
+                                {
+                                    slDoiTuong++;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                treeView_phanloaiBN.Nodes[4].Nodes.Add(doiTuong.TenDT + "(" + slDoiTuong.ToString() + ")");
+            }
+        }
+
+        private void load_TreeView(DataGridView dgv)
+        {
+            int dotuoi = 0, slNam = 0, slNu = 0, allBN = 0;
+
+            foreach (DataGridViewRow row in dgv.Rows)
+            {
+                allBN++;
+
+                if (row.Cells["GioiTinh"].Value != null)
+                {
+                    String gioitinh = row.Cells["GioiTinh"].Value.ToString();
+                    if (gioitinh == "Nam")
+                    {
+                        slNam++;
+                    }
+                    if (gioitinh == "Nữ")
+                    {
+                        slNu++;
+                    }
+                }
+                if (row.Cells["NamSinh"].Value != null)
+                {
+                    int tuoi = Int32.Parse(row.Cells["NamSinh"].Value.ToString().Substring(6, 1));
+                    if (tuoi < 6)
+                    {
+                        dotuoi++;
+                    }
+                }
+                
+            }
+
+            treeView_phanloaiBN.Nodes.RemoveAt(0);
+            treeView_phanloaiBN.Nodes.Insert(0, "Tất cả bệnh nhân (" + (allBN - 1).ToString() + ")");
+
+            load_NodeCaKham(dgv);
+
+            treeView_phanloaiBN.Nodes[2].Nodes.Clear();
+            treeView_phanloaiBN.Nodes[2].Nodes.Add("Trẻ em dưới 6 tuổi (" + dotuoi.ToString() +")");
+
+            treeView_phanloaiBN.Nodes[3].Nodes.Clear();
+            treeView_phanloaiBN.Nodes[3].Nodes.Add("Nam (" + slNam.ToString() + ")");
+            treeView_phanloaiBN.Nodes[3].Nodes.Add("Nữ (" + slNu.ToString() + ")");
+
+            load_NodeDoiTuong(dgv);
+        }
+
         // LOAD FORM
 
         private void dsKhamBenh_Load(object sender, EventArgs e)
@@ -157,16 +267,6 @@ namespace KhamBenhND2.View
             {
                 string khoa = khoaController.getKhoaByMaKhoa(phongKham.MaKhoa).TenKhoa;
                 cbb_phongkham.Items.Add(phongKham.TenPK + " - " + khoa);
-            }
-
-            foreach (CaKham caKham in caKhamController.loadAll())
-            {
-                treeView_phanloaiBN.Nodes[1].Nodes.Add(caKham.TenCaKham);
-            }
-
-            foreach (DoiTuong doiTuong in doiTuongController.loadAll())
-            {
-                treeView_phanloaiBN.Nodes[4].Nodes.Add(doiTuong.TenDT);
             }
 
             foreach (LichSuKham lsk in lichSuKhamController.loadAll())
@@ -206,6 +306,8 @@ namespace KhamBenhND2.View
                     }
                 }
             }
+
+            load_TreeView(dgv_dskhambenh);
         }
 
         // PRINT DOCUMENT
