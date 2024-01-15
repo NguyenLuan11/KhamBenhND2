@@ -145,6 +145,8 @@ namespace KhamBenhND2.View
         {
             // Đặt hướng giấy thành nằm ngang
             printDocumentDSkham.DefaultPageSettings.Landscape = true;
+            // Set kích thước giấy
+            printDocumentDSkham.DefaultPageSettings.PaperSize = new PaperSize("Custom", 2000, 3800);
 
             printPreviewDialogDSkham.Document = printDocumentDSkham;
             printPreviewDialogDSkham.ShowDialog();
@@ -309,12 +311,12 @@ namespace KhamBenhND2.View
         private void printDocumentDSkham_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
             e.Graphics.DrawString("BỆNH VIỆN NHI ĐỒNG 2 ", new Font("Arial", 20, FontStyle.Bold), Brushes.Black, new Point(10, 10));
-            e.Graphics.DrawString("DANH SÁCH KHÁM BỆNH", new Font("Arial", 40, FontStyle.Bold), Brushes.Black, new Point(230, 80));
+            e.Graphics.DrawString("DANH SÁCH KHÁM BỆNH", new Font("Arial", 50, FontStyle.Bold), Brushes.Black, new Point(1450, 80));
 
             string startDate = String.Format("{0:HH:mm dd/MM/yyyy}", dtp_dateStart.Value).Split(" ")[1];
             string endDate = String.Format("{0:HH:mm dd/MM/yyyy}", dtp_dateEnd.Value).Split(" ")[1];
-            e.Graphics.DrawString("Từ ngày " + startDate + ", ", new Font("Arial", 20, FontStyle.Italic), Brushes.Black, new Point(20, 200));
-            e.Graphics.DrawString("đến ngày " + endDate, new Font("Arial", 20, FontStyle.Italic), Brushes.Black, new Point(277, 200));
+            e.Graphics.DrawString("Từ ngày " + startDate + ", ", new Font("Arial", 20, FontStyle.Italic), Brushes.Black, new Point(200, 200));
+            e.Graphics.DrawString("đến ngày " + endDate, new Font("Arial", 20, FontStyle.Italic), Brushes.Black, new Point(475, 200));
 
 
             PrintDataGridView(dgv_dskhambenh, e);
@@ -327,7 +329,7 @@ namespace KhamBenhND2.View
             float yPos = 300;
             int columnsCount = dataGridView.Columns.Count;
             int rowsCount = dataGridView.Rows.Count;
-            float leftMargin = 0;
+            float leftMargin = 300;
             float topMargin = e.MarginBounds.Top;
             bool firstPage = true;
 
@@ -336,11 +338,18 @@ namespace KhamBenhND2.View
             {
                 for (int i = 0; i < columnsCount; i++)
                 {
-                    e.Graphics.DrawString(dataGridView.Columns[i].HeaderText,
-                        dataGridView.Font, Brushes.Black, leftMargin, yPos);
-                    leftMargin += dataGridView.Columns[i].Width;
+                    e.Graphics.DrawString(dataGridView.Columns[i].HeaderText, 
+                        new Font("Arial", 20, FontStyle.Bold), Brushes.Black, leftMargin, yPos);
+                    if (i == 6)
+                    {
+                        leftMargin += (dataGridView.Columns[i].Width + 600);
+                    }
+                    else
+                    {
+                        leftMargin += (dataGridView.Columns[i].Width + 200);
+                    }
                 }
-                yPos += dataGridView.Rows[0].Height;
+                yPos += (dataGridView.Rows[0].Height + 30);
                 firstPage = false;
             }
 
@@ -354,14 +363,21 @@ namespace KhamBenhND2.View
                     return;
                 }
 
-                leftMargin = 0;
+                leftMargin = 300;
                 for (int i = 0; i < columnsCount; i++)
                 {
                     e.Graphics.DrawString(row.Cells[i].Value?.ToString(),
-                        dataGridView.Font, Brushes.Black, leftMargin, yPos);
-                    leftMargin += dataGridView.Columns[i].Width;
+                        new Font("Arial", 20, FontStyle.Regular), Brushes.Black, leftMargin, yPos);
+                    if (i == 6)
+                    {
+                        leftMargin += (dataGridView.Columns[i].Width + 600);
+                    }
+                    else
+                    {
+                        leftMargin += (dataGridView.Columns[i].Width + 200);
+                    }
                 }
-                yPos += row.Height;
+                yPos += (row.Height + 30);
                 rowIndex++;
             }
 
