@@ -316,7 +316,7 @@ namespace KhamBenhND2.View
             string startDate = String.Format("{0:HH:mm dd/MM/yyyy}", dtp_dateStart.Value).Split(" ")[1];
             string endDate = String.Format("{0:HH:mm dd/MM/yyyy}", dtp_dateEnd.Value).Split(" ")[1];
             e.Graphics.DrawString("Từ ngày " + startDate + ", ", new Font("Arial", 20, FontStyle.Italic), Brushes.Black, new Point(200, 200));
-            e.Graphics.DrawString("đến ngày " + endDate, new Font("Arial", 20, FontStyle.Italic), Brushes.Black, new Point(475, 200));
+            e.Graphics.DrawString("đến ngày " + endDate, new Font("Arial", 20, FontStyle.Italic), Brushes.Black, new Point(465, 200));
 
 
             PrintDataGridView(dgv_dskhambenh, e);
@@ -329,7 +329,7 @@ namespace KhamBenhND2.View
             float yPos = 300;
             int columnsCount = dataGridView.Columns.Count;
             int rowsCount = dataGridView.Rows.Count;
-            float leftMargin = 300;
+            float leftMargin = 250;
             float topMargin = e.MarginBounds.Top;
             bool firstPage = true;
 
@@ -363,7 +363,7 @@ namespace KhamBenhND2.View
                     return;
                 }
 
-                leftMargin = 300;
+                leftMargin = 250;
                 for (int i = 0; i < columnsCount; i++)
                 {
                     e.Graphics.DrawString(row.Cells[i].Value?.ToString(),
