@@ -167,12 +167,9 @@ namespace KhamBenhND2.View
                         string maPK = phongKhamController.getPKByTenPK(phongkham).MaPK;
                         foreach (LichSuKham lsk in lichSuKhamController.loadAll())
                         {
-                            if (lsk.MaBN == maBN && lsk.MaPK == maPK)
+                            if (lsk.MaBN == maBN && lsk.MaPK == maPK && caKham.MaCaKham == lsk.MaCaKham)
                             {
-                                if (caKham.MaCaKham == lsk.MaCaKham)
-                                {
-                                    slCaKham++;
-                                }
+                                slCaKham++;
                             }
                         }
                     }
@@ -197,12 +194,9 @@ namespace KhamBenhND2.View
                         string maPK = phongKhamController.getPKByTenPK(phongkham).MaPK;
                         foreach (LichSuKham lsk in lichSuKhamController.loadAll())
                         {
-                            if (lsk.MaBN == maBN && lsk.MaPK == maPK)
+                            if (lsk.MaBN == maBN && lsk.MaPK == maPK && lsk.MaDT == doiTuong.MaDT)
                             {
-                                if (lsk.MaDT == doiTuong.MaDT)
-                                {
-                                    slDoiTuong++;
-                                }
+                                slDoiTuong++;
                             }
                         }
                     }
